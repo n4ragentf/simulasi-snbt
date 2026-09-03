@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as SimulasiRouteImport } from './routes/simulasi'
+import { Route as UjianRouteImport } from './routes/ujian'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const SimulasiRoute = SimulasiRouteImport.update({
   path: '/simulasi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UjianRoute = UjianRouteImport.update({
+  id: '/ujian',
+  path: '/ujian',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/simulasi': typeof SimulasiRoute
+  '/ujian': typeof UjianRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/simulasi': typeof SimulasiRoute
+  '/ujian': typeof UjianRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/simulasi': typeof SimulasiRoute
+  '/ujian': typeof UjianRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/simulasi'
+  fullPaths: '/' | '/dashboard' | '/simulasi' | '/ujian'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/simulasi'
-  id: '__root__' | '/' | '/dashboard' | '/simulasi'
+  to: '/' | '/dashboard' | '/simulasi' | '/ujian'
+  id: '__root__' | '/' | '/dashboard' | '/simulasi' | '/ujian'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   SimulasiRoute: typeof SimulasiRoute
+  UjianRoute: typeof UjianRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SimulasiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ujian': {
+      id: '/ujian'
+      path: '/ujian'
+      fullPath: '/ujian'
+      preLoaderRoute: typeof UjianRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   SimulasiRoute: SimulasiRoute,
+  UjianRoute: UjianRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
