@@ -10,33 +10,91 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as SimulasiRouteImport } from './routes/simulasi'
+import { Route as UjianRouteImport } from './routes/ujian'
+import { Route as HasilIdRouteImport } from './routes/hasil.$id'
+import { Route as ReviewIdRouteImport } from './routes/review.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimulasiRoute = SimulasiRouteImport.update({
+  id: '/simulasi',
+  path: '/simulasi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UjianRoute = UjianRouteImport.update({
+  id: '/ujian',
+  path: '/ujian',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HasilIdRoute = HasilIdRouteImport.update({
+  id: '/hasil/$id',
+  path: '/hasil/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewIdRoute = ReviewIdRouteImport.update({
+  id: '/review/$id',
+  path: '/review/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/simulasi': typeof SimulasiRoute
+  '/ujian': typeof UjianRoute
+  '/hasil/$id': typeof HasilIdRoute
+  '/review/$id': typeof ReviewIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/simulasi': typeof SimulasiRoute
+  '/ujian': typeof UjianRoute
+  '/hasil/$id': typeof HasilIdRoute
+  '/review/$id': typeof ReviewIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/simulasi': typeof SimulasiRoute
+  '/ujian': typeof UjianRoute
+  '/hasil/$id': typeof HasilIdRoute
+  '/review/$id': typeof ReviewIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/dashboard' | '/simulasi' | '/ujian' | '/hasil/$id' | '/review/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/dashboard' | '/simulasi' | '/ujian' | '/hasil/$id' | '/review/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/simulasi'
+    | '/ujian'
+    | '/hasil/$id'
+    | '/review/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
+  SimulasiRoute: typeof SimulasiRoute
+  UjianRoute: typeof UjianRoute
+  HasilIdRoute: typeof HasilIdRoute
+  ReviewIdRoute: typeof ReviewIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +106,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulasi': {
+      id: '/simulasi'
+      path: '/simulasi'
+      fullPath: '/simulasi'
+      preLoaderRoute: typeof SimulasiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ujian': {
+      id: '/ujian'
+      path: '/ujian'
+      fullPath: '/ujian'
+      preLoaderRoute: typeof UjianRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hasil/$id': {
+      id: '/hasil/$id'
+      path: '/hasil/$id'
+      fullPath: '/hasil/$id'
+      preLoaderRoute: typeof HasilIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review/$id': {
+      id: '/review/$id'
+      path: '/review/$id'
+      fullPath: '/review/$id'
+      preLoaderRoute: typeof ReviewIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
+  SimulasiRoute: SimulasiRoute,
+  UjianRoute: UjianRoute,
+  HasilIdRoute: HasilIdRoute,
+  ReviewIdRoute: ReviewIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
