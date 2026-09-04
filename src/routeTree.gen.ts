@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as RiwayatRouteImport } from './routes/riwayat'
 import { Route as SimulasiRouteImport } from './routes/simulasi'
 import { Route as UjianRouteImport } from './routes/ujian'
@@ -31,6 +32,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const LeaderboardRoute = LeaderboardRouteImport.update({
   id: '/leaderboard',
   path: '/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilRoute = ProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RiwayatRoute = RiwayatRouteImport.update({
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/profil': typeof ProfilRoute
   '/riwayat': typeof RiwayatRoute
   '/simulasi': typeof SimulasiRoute
   '/ujian': typeof UjianRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/profil': typeof ProfilRoute
   '/riwayat': typeof RiwayatRoute
   '/simulasi': typeof SimulasiRoute
   '/ujian': typeof UjianRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/profil': typeof ProfilRoute
   '/riwayat': typeof RiwayatRoute
   '/simulasi': typeof SimulasiRoute
   '/ujian': typeof UjianRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/leaderboard'
+    | '/profil'
     | '/riwayat'
     | '/simulasi'
     | '/ujian'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/leaderboard'
+    | '/profil'
     | '/riwayat'
     | '/simulasi'
     | '/ujian'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/leaderboard'
+    | '/profil'
     | '/riwayat'
     | '/simulasi'
     | '/ujian'
@@ -127,6 +139,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   LeaderboardRoute: typeof LeaderboardRoute
+  ProfilRoute: typeof ProfilRoute
   RiwayatRoute: typeof RiwayatRoute
   SimulasiRoute: typeof SimulasiRoute
   UjianRoute: typeof UjianRoute
@@ -155,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/leaderboard'
       fullPath: '/leaderboard'
       preLoaderRoute: typeof LeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil': {
+      id: '/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof ProfilRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/riwayat': {
@@ -199,6 +219,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   LeaderboardRoute: LeaderboardRoute,
+  ProfilRoute: ProfilRoute,
   RiwayatRoute: RiwayatRoute,
   SimulasiRoute: SimulasiRoute,
   UjianRoute: UjianRoute,
