@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
+import { Route as RiwayatRouteImport } from './routes/riwayat'
 import { Route as SimulasiRouteImport } from './routes/simulasi'
 import { Route as UjianRouteImport } from './routes/ujian'
 import { Route as HasilIdRouteImport } from './routes/hasil.$id'
@@ -24,6 +26,16 @@ const IndexRoute = IndexRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RiwayatRoute = RiwayatRouteImport.update({
+  id: '/riwayat',
+  path: '/riwayat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SimulasiRoute = SimulasiRouteImport.update({
@@ -50,6 +62,8 @@ const ReviewIdRoute = ReviewIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/riwayat': typeof RiwayatRoute
   '/simulasi': typeof SimulasiRoute
   '/ujian': typeof UjianRoute
   '/hasil/$id': typeof HasilIdRoute
@@ -58,6 +72,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/riwayat': typeof RiwayatRoute
   '/simulasi': typeof SimulasiRoute
   '/ujian': typeof UjianRoute
   '/hasil/$id': typeof HasilIdRoute
@@ -67,6 +83,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/leaderboard': typeof LeaderboardRoute
+  '/riwayat': typeof RiwayatRoute
   '/simulasi': typeof SimulasiRoute
   '/ujian': typeof UjianRoute
   '/hasil/$id': typeof HasilIdRoute
@@ -75,13 +93,30 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/dashboard' | '/simulasi' | '/ujian' | '/hasil/$id' | '/review/$id'
+    | '/'
+    | '/dashboard'
+    | '/leaderboard'
+    | '/riwayat'
+    | '/simulasi'
+    | '/ujian'
+    | '/hasil/$id'
+    | '/review/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/simulasi' | '/ujian' | '/hasil/$id' | '/review/$id'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/leaderboard'
+    | '/riwayat'
+    | '/simulasi'
+    | '/ujian'
+    | '/hasil/$id'
+    | '/review/$id'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/leaderboard'
+    | '/riwayat'
     | '/simulasi'
     | '/ujian'
     | '/hasil/$id'
@@ -91,6 +126,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  LeaderboardRoute: typeof LeaderboardRoute
+  RiwayatRoute: typeof RiwayatRoute
   SimulasiRoute: typeof SimulasiRoute
   UjianRoute: typeof UjianRoute
   HasilIdRoute: typeof HasilIdRoute
@@ -111,6 +148,20 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/riwayat': {
+      id: '/riwayat'
+      path: '/riwayat'
+      fullPath: '/riwayat'
+      preLoaderRoute: typeof RiwayatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/simulasi': {
@@ -147,6 +198,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  LeaderboardRoute: LeaderboardRoute,
+  RiwayatRoute: RiwayatRoute,
   SimulasiRoute: SimulasiRoute,
   UjianRoute: UjianRoute,
   HasilIdRoute: HasilIdRoute,
