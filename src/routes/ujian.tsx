@@ -80,6 +80,7 @@ function ExamPage() {
       const guest = getGuest();
       const result = computeResult(s, guest?.name ?? "Guest");
       saveResult(result);
+      void submitLeaderboardScore(result);
       clearSession();
       if (auto) toast.info("Waktu habis. Jawabanmu telah disimpan otomatis.");
       navigate({ to: "/hasil/$id", params: { id: result.id } });
