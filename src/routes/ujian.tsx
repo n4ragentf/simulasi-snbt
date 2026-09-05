@@ -28,6 +28,7 @@ import { getQuestion } from "@/data/questions";
 import { formatClock, remainingSeconds, sectionLabel } from "@/lib/exam-engine";
 import { computeResult } from "@/lib/scoring";
 import { clearSession, getGuest, getSession, saveResult, saveSession } from "@/lib/storage";
+import { submitLeaderboardScore } from "@/lib/leaderboard";
 import type { ExamSession } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
