@@ -14,7 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      leaderboard_scores: {
+        Row: {
+          accuracy: number
+          finished_at: string
+          guest_id: string
+          id: string
+          mode: string
+          name: string
+          result_id: string
+          score: number
+          section: string | null
+          time_used_sec: number
+          title: string
+        }
+        Insert: {
+          accuracy: number
+          finished_at?: string
+          guest_id: string
+          id?: string
+          mode: string
+          name: string
+          result_id: string
+          score: number
+          section?: string | null
+          time_used_sec: number
+          title: string
+        }
+        Update: {
+          accuracy?: number
+          finished_at?: string
+          guest_id?: string
+          id?: string
+          mode?: string
+          name?: string
+          result_id?: string
+          score?: number
+          section?: string | null
+          time_used_sec?: number
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
