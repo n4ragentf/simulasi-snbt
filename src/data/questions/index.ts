@@ -6,20 +6,24 @@ import { pengetahuanKuantitatif } from "./pengetahuan-kuantitatif";
 import { literasiIndonesia } from "./literasi-indonesia";
 import { literasiInggris } from "./literasi-inggris";
 import { penalaranMatematika } from "./penalaran-matematika";
+import { arsipPenalaranUmum } from "./arsip-penalaran-umum";
+import { arsipKuantitatif } from "./arsip-kuantitatif";
+import { arsipPenalaranMatematika } from "./arsip-penalaran-matematika";
 
 /**
  * Question bank grouped by section.
  * To add questions: append to the relevant file — no engine change required.
  */
 export const QUESTION_BANK: Record<SectionId, Question[]> = {
-  "penalaran-umum": penalaranUmum,
+  "penalaran-umum": [...penalaranUmum, ...arsipPenalaranUmum],
   "pengetahuan-pemahaman-umum": pengetahuanPemahamanUmum,
   "pemahaman-bacaan-menulis": pemahamanBacaanMenulis,
-  "pengetahuan-kuantitatif": pengetahuanKuantitatif,
+  "pengetahuan-kuantitatif": [...pengetahuanKuantitatif, ...arsipKuantitatif],
   "literasi-indonesia": literasiIndonesia,
   "literasi-inggris": literasiInggris,
-  "penalaran-matematika": penalaranMatematika,
+  "penalaran-matematika": [...penalaranMatematika, ...arsipPenalaranMatematika],
 };
+
 
 export const ALL_QUESTIONS: Question[] = Object.values(QUESTION_BANK).flat();
 
