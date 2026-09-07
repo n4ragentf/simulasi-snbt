@@ -211,7 +211,9 @@ function DashboardPage() {
                   }`}
                   aria-label={`${d.key}${d.active ? " aktif" : " tidak aktif"}`}
                 />
-                <span className="text-[10px] text-muted-foreground">{DAY_LABELS[i]}</span>
+                <span className="text-[10px] text-muted-foreground">
+                  {DAY_LABELS[new Date(`${d.key}T00:00:00`).getDay()]}
+                </span>
               </div>
             ))}
           </div>
