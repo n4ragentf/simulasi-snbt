@@ -119,13 +119,22 @@ function DashboardPage() {
   const navigate = useNavigate();
   const [history, setHistory] = useState<ExamResult[]>([]);
   const [session, setSession] = useState<ExamSession | null>(null);
+  const [streak, setStreak] = useState<StreakData>({
+    current: 0,
+    longest: 0,
+    lastDay: null,
+    days: [],
+  });
 
   useEffect(() => {
     if (!ready) return;
     setHistory(getHistory());
     setSession(getSession());
+    setStreak(getStreak());
   }, [ready, guest]);
 
+  const week = useMemo(() => lastSevenDays(streak), [streak]);
+  const todayKey = dayKey();
   const stats = useMemo(() => computeStats(history), [history]);
   const weak = useMemo(() => weakestSections(history), [history]);
   const last = history[0];
