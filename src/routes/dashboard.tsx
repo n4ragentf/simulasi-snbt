@@ -203,7 +203,7 @@ function DashboardPage() {
             </div>
           </div>
           <div className="flex items-end gap-2">
-            {week.map((d, i) => (
+            {week.map((d) => (
               <div key={d.key} className="flex flex-col items-center gap-1">
                 <div
                   className={`size-8 rounded-lg border ${
