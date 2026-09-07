@@ -15,7 +15,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { createExam, getBlueprints, questionCountFor, type SimulationBlueprint } from "@/lib/exam-engine";
+import { createArsipExam, createExam, getBlueprints, questionCountFor, type SimulationBlueprint } from "@/lib/exam-engine";
+import { ARSIP_TOTAL } from "@/data/questions/arsip";
 import { clearSession, getGuest, getSession, saveSession } from "@/lib/storage";
 import type { ExamSession } from "@/lib/types";
 
@@ -116,6 +117,35 @@ function SimulasiPage() {
     }
     start(bp);
   };
+
+  const startArsip = () => {
+    const guest = getGuest();
+    if (!guest) {
+      navigate({ to: "/dashboard" });
+      return;
+    }
+    const session = createArsipExam({
+      guestId: guest.guestId,
+      count: arsipCount,
+      shuffleQuestions,
+      shuffleOptions,
+    });
+    saveSession(session);
+    navigate({ to: "/ujian" });
+  };
+
+  const handleStartArsip = () => {
+    if (existing) {
+      const ok = window.confirm(
+        "Kamu punya simulasi yang belum selesai. Memulai latihan baru akan menghapus progres itu. Lanjutkan?",
+      );
+      if (!ok) return;
+      clearSession();
+      setExisting(null);
+    }
+    startArsip();
+  };
+
 
   return (
     <AppShell>
