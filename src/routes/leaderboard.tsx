@@ -21,7 +21,9 @@ import {
   type LeaderboardPeriod,
 } from "@/lib/leaderboard";
 import { formatDuration } from "@/lib/exam-engine";
+import { SECTIONS } from "@/data/sections";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/leaderboard")({
   head: () => ({
@@ -48,6 +50,11 @@ const MODE_TABS: { value: LeaderboardMode; label: string }[] = [
   { value: "quick", label: "Quick Practice" },
 ];
 
+const SECTION_TABS: { value: string; label: string }[] = [
+  { value: "all", label: "Semua Subtes" },
+  ...SECTIONS.map((s) => ({ value: s.name, label: s.short })),
+];
+
 function LeaderboardPage() {
   const [entries, setEntries] = useState<GlobalLeaderboardEntry[]>([]);
   const [guestId, setGuestId] = useState<string | null>(null);
@@ -55,7 +62,9 @@ function LeaderboardPage() {
   const [online, setOnline] = useState(true);
   const [period, setPeriod] = useState<LeaderboardPeriod>("all");
   const [mode, setMode] = useState<LeaderboardMode>("all");
+  const [section, setSection] = useState<string>("all");
   const [reloadKey, setReloadKey] = useState(0);
+
 
   useEffect(() => {
     setGuestId(getGuest()?.guestId ?? null);
