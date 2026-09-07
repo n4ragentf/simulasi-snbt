@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Award, Gauge, Layers, Play, Target, TrendingDown } from "lucide-react";
+import { Award, Flame, Gauge, Layers, Play, Target, TrendingDown } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/app-header";
 import { StatCard } from "@/components/stat-card";
@@ -12,6 +12,9 @@ import { useGuest, validateName } from "@/hooks/use-guest";
 import { getHistory, getSession } from "@/lib/storage";
 import { sectionLabel } from "@/lib/exam-engine";
 import type { ExamResult, ExamSession, SectionId } from "@/lib/types";
+import { dayKey, getStreak, lastSevenDays, type StreakData } from "@/lib/streak";
+
+const DAY_LABELS = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -116,13 +119,22 @@ function DashboardPage() {
   const navigate = useNavigate();
   const [history, setHistory] = useState<ExamResult[]>([]);
   const [session, setSession] = useState<ExamSession | null>(null);
+  const [streak, setStreak] = useState<StreakData>({
+    current: 0,
+    longest: 0,
+    lastDay: null,
+    days: [],
+  });
 
   useEffect(() => {
     if (!ready) return;
     setHistory(getHistory());
     setSession(getSession());
+    setStreak(getStreak());
   }, [ready, guest]);
 
+  const week = useMemo(() => lastSevenDays(streak), [streak]);
+  const todayKey = dayKey();
   const stats = useMemo(() => computeStats(history), [history]);
   const weak = useMemo(() => weakestSections(history), [history]);
   const last = history[0];
@@ -175,7 +187,46 @@ function DashboardPage() {
         </Card>
       ) : null}
 
+      <Card className="mt-6 shadow-card">
+        <CardContent className="flex flex-wrap items-center justify-between gap-6 p-5">
+          <div className="flex items-center gap-4">
+            <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <Flame className="size-7" aria-hidden="true" />
+            </div>
+            <div>
+              <p className="font-display text-3xl font-bold leading-none">
+                {streak.current} <span className="text-base font-medium text-muted-foreground">hari</span>
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Runtunan harian · rekor {streak.longest} hari
+              </p>
+            </div>
+          </div>
+          <div className="flex items-end gap-2">
+            {week.map((d) => (
+              <div key={d.key} className="flex flex-col items-center gap-1">
+                <div
+                  className={`size-8 rounded-lg border ${
+                    d.active ? "border-primary bg-primary/80" : "border-border bg-muted"
+                  }`}
+                  aria-label={`${d.key}${d.active ? " aktif" : " tidak aktif"}`}
+                />
+                <span className="text-[10px] text-muted-foreground">
+                  {DAY_LABELS[new Date(`${d.key}T00:00:00`).getDay()]}
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground">
+            {streak.lastDay === todayKey
+              ? "Mantap! Kamu sudah latihan hari ini."
+              : "Selesaikan satu simulasi hari ini untuk menjaga runtunanmu."}
+          </p>
+        </CardContent>
+      </Card>
+
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
         <StatCard label="Best Score" value={stats.best || "—"} icon={<Award className="size-5" />} />
         <StatCard label="Rata-rata" value={stats.avg || "—"} icon={<Gauge className="size-5" />} />
         <StatCard label="Total Simulasi" value={stats.total} icon={<Layers className="size-5" />} />

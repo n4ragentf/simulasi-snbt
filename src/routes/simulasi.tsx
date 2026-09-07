@@ -15,7 +15,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { createExam, getBlueprints, questionCountFor, type SimulationBlueprint } from "@/lib/exam-engine";
+import { createArsipExam, createExam, getBlueprints, questionCountFor, type SimulationBlueprint } from "@/lib/exam-engine";
+import { ARSIP_TOTAL } from "@/data/questions/arsip";
 import { clearSession, getGuest, getSession, saveSession } from "@/lib/storage";
 import type { ExamSession } from "@/lib/types";
 
@@ -117,6 +118,35 @@ function SimulasiPage() {
     start(bp);
   };
 
+  const startArsip = () => {
+    const guest = getGuest();
+    if (!guest) {
+      navigate({ to: "/dashboard" });
+      return;
+    }
+    const session = createArsipExam({
+      guestId: guest.guestId,
+      count: arsipCount,
+      shuffleQuestions,
+      shuffleOptions,
+    });
+    saveSession(session);
+    navigate({ to: "/ujian" });
+  };
+
+  const handleStartArsip = () => {
+    if (existing) {
+      const ok = window.confirm(
+        "Kamu punya simulasi yang belum selesai. Memulai latihan baru akan menghapus progres itu. Lanjutkan?",
+      );
+      if (!ok) return;
+      clearSession();
+      setExisting(null);
+    }
+    startArsip();
+  };
+
+
   return (
     <AppShell>
       <h1 className="text-3xl font-bold">Pilih Simulasi</h1>
@@ -167,10 +197,60 @@ function SimulasiPage() {
         </CardContent>
       </Card>
 
+      <Card className="mt-6 shadow-card">
+        <CardHeader>
+          <CardTitle className="text-base">Latihan Soal Baru (Arsip)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">
+            Hanya berisi {ARSIP_TOTAL} soal arsip yang baru ditambahkan. Pilih sendiri jumlah soalnya —
+            waktu menyesuaikan (1,5 menit per soal).
+          </p>
+          <div className="mt-4 space-y-2">
+            <Label htmlFor="arsip-count">Jumlah soal: {arsipCount}</Label>
+            <input
+              id="arsip-count"
+              type="range"
+              min={1}
+              max={ARSIP_TOTAL}
+              value={arsipCount}
+              onChange={(e) => setArsipCount(Number(e.target.value))}
+              className="w-full accent-primary"
+            />
+            <div className="flex flex-wrap gap-2 pt-1">
+              {[5, 10, 15, ARSIP_TOTAL].map((n) => (
+                <Button
+                  key={n}
+                  type="button"
+                  size="sm"
+                  variant={arsipCount === n ? "default" : "outline"}
+                  className="rounded-full"
+                  onClick={() => setArsipCount(Math.min(n, ARSIP_TOTAL))}
+                >
+                  {n === ARSIP_TOTAL ? `Semua (${ARSIP_TOTAL})` : n}
+                </Button>
+              ))}
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground">
+            <span className="inline-flex items-center gap-1">
+              <FileText className="size-3.5" aria-hidden="true" /> {arsipCount} soal
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Clock className="size-3.5" aria-hidden="true" /> {Math.round((arsipCount * 90) / 60)} menit
+            </span>
+          </div>
+          <Button className="mt-5 w-full rounded-full sm:w-auto" onClick={handleStartArsip}>
+            <Play className="mr-1 size-4" aria-hidden="true" /> Mulai Latihan Soal Baru
+          </Button>
+        </CardContent>
+      </Card>
+
       <section className="mt-10 grid gap-4 md:grid-cols-2">
         <BlueprintCard bp={full} highlight onStart={handleStart} />
         <BlueprintCard bp={quick} onStart={handleStart} />
       </section>
+
 
       <section className="mt-10">
         <h2 className="inline-flex items-center gap-2 text-xl font-bold">

@@ -1,4 +1,5 @@
 import { QUESTION_BANK, getQuestionsBySection } from "@/data/questions";
+import { ARSIP_QUESTIONS } from "@/data/questions/arsip";
 import { SECTIONS, SECTION_MAP } from "@/data/sections";
 import type { ExamItem, ExamMode, ExamSession, Question, SectionId } from "./types";
 import { uuid } from "./storage";
@@ -117,9 +118,56 @@ export function createExam({
   };
 }
 
+/** Latihan khusus soal arsip (soal yang baru ditambahkan), jumlah soal dipilih user. */
+export function createArsipExam({
+  guestId,
+  count,
+  shuffleQuestions,
+  shuffleOptions,
+}: {
+  guestId: string;
+  count: number;
+  shuffleQuestions: boolean;
+  shuffleOptions: boolean;
+}): ExamSession {
+  const pool = shuffleQuestions ? shuffle(ARSIP_QUESTIONS) : ARSIP_QUESTIONS;
+  const picked = pool.slice(0, Math.max(1, Math.min(count, pool.length)));
+
+  const items: ExamItem[] = picked.map((q) => {
+    const baseOrder = q.options.map((_, i) => i);
+    return {
+      questionId: q.id,
+      sectionId: q.sectionId,
+      optionOrder: shuffleOptions ? shuffle(baseOrder) : baseOrder,
+    };
+  });
+
+  const now = Date.now();
+  const durationSec = picked.length * 90;
+  const sectionIds = [...new Set(picked.map((q) => q.sectionId))];
+
+  return {
+    id: uuid(),
+    guestId,
+    mode: "quick",
+    title: `Latihan Soal Arsip (${picked.length} soal)`,
+    sectionIds,
+    items,
+    answers: {},
+    marked: [],
+    currentIndex: 0,
+    startedAt: now,
+    endsAt: now + durationSec * 1000,
+    durationSec,
+    shuffleQuestions,
+    shuffleOptions,
+  };
+}
+
 export function remainingSeconds(session: ExamSession, now = Date.now()): number {
   return Math.max(0, Math.round((session.endsAt - now) / 1000));
 }
+
 
 export function formatClock(totalSeconds: number): string {
   const s = Math.max(0, Math.floor(totalSeconds));

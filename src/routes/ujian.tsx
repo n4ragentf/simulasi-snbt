@@ -29,6 +29,7 @@ import { formatClock, remainingSeconds, sectionLabel } from "@/lib/exam-engine";
 import { computeResult } from "@/lib/scoring";
 import { clearSession, getGuest, getSession, saveResult, saveSession } from "@/lib/storage";
 import { submitLeaderboardScore } from "@/lib/leaderboard";
+import { recordActivity } from "@/lib/streak";
 import type { ExamSession } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -81,6 +82,7 @@ function ExamPage() {
       const guest = getGuest();
       const result = computeResult(s, guest?.name ?? "Guest");
       saveResult(result);
+      recordActivity();
       void submitLeaderboardScore(result);
       clearSession();
       if (auto) toast.info("Waktu habis. Jawabanmu telah disimpan otomatis.");
