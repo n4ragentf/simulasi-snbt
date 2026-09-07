@@ -21,7 +21,9 @@ import {
   type LeaderboardPeriod,
 } from "@/lib/leaderboard";
 import { formatDuration } from "@/lib/exam-engine";
+import { SECTIONS } from "@/data/sections";
 import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/leaderboard")({
   head: () => ({
@@ -48,6 +50,11 @@ const MODE_TABS: { value: LeaderboardMode; label: string }[] = [
   { value: "quick", label: "Quick Practice" },
 ];
 
+const SECTION_TABS: { value: string; label: string }[] = [
+  { value: "all", label: "Semua Subtes" },
+  ...SECTIONS.map((s) => ({ value: s.name, label: s.short })),
+];
+
 function LeaderboardPage() {
   const [entries, setEntries] = useState<GlobalLeaderboardEntry[]>([]);
   const [guestId, setGuestId] = useState<string | null>(null);
@@ -55,7 +62,9 @@ function LeaderboardPage() {
   const [online, setOnline] = useState(true);
   const [period, setPeriod] = useState<LeaderboardPeriod>("all");
   const [mode, setMode] = useState<LeaderboardMode>("all");
+  const [section, setSection] = useState<string>("all");
   const [reloadKey, setReloadKey] = useState(0);
+
 
   useEffect(() => {
     setGuestId(getGuest()?.guestId ?? null);
@@ -64,7 +73,7 @@ function LeaderboardPage() {
   useEffect(() => {
     let cancelled = false;
     setReady(false);
-    fetchLeaderboard(period, mode).then((res) => {
+    fetchLeaderboard(period, mode, section === "all" ? undefined : section).then((res) => {
       if (cancelled) return;
       if (res.online) {
         setEntries(res.entries);
@@ -92,7 +101,7 @@ function LeaderboardPage() {
     return () => {
       cancelled = true;
     };
-  }, [period, mode, reloadKey]);
+  }, [period, mode, section, reloadKey]);
 
   const myBestRank = useMemo(
     () => entries.findIndex((e) => e.guestId === guestId) + 1,
@@ -137,7 +146,13 @@ function LeaderboardPage() {
             <TabsTrigger value="all">Sepanjang Masa</TabsTrigger>
           </TabsList>
         </Tabs>
-        <Tabs value={mode} onValueChange={(v) => setMode(v as LeaderboardMode)}>
+        <Tabs
+          value={mode}
+          onValueChange={(v) => {
+            setMode(v as LeaderboardMode);
+            if (v !== "section") setSection("all");
+          }}
+        >
           <TabsList className="flex-wrap">
             {MODE_TABS.map((t) => (
               <TabsTrigger key={t.value} value={t.value}>
@@ -146,7 +161,19 @@ function LeaderboardPage() {
             ))}
           </TabsList>
         </Tabs>
+        {mode === "section" ? (
+          <Tabs value={section} onValueChange={setSection}>
+            <TabsList className="flex-wrap">
+              {SECTION_TABS.map((t) => (
+                <TabsTrigger key={t.value} value={t.value} title={t.value}>
+                  {t.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        ) : null}
       </div>
+
 
       {online && myBestRank > 0 && myBestRank <= 100 ? (
         <p className="mt-4 rounded-xl border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium text-primary">
