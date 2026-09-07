@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Award, Gauge, Layers, Play, Target, TrendingDown } from "lucide-react";
+import { Award, Flame, Gauge, Layers, Play, Target, TrendingDown } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/app-header";
 import { StatCard } from "@/components/stat-card";
@@ -12,6 +12,9 @@ import { useGuest, validateName } from "@/hooks/use-guest";
 import { getHistory, getSession } from "@/lib/storage";
 import { sectionLabel } from "@/lib/exam-engine";
 import type { ExamResult, ExamSession, SectionId } from "@/lib/types";
+import { dayKey, getStreak, lastSevenDays, type StreakData } from "@/lib/streak";
+
+const DAY_LABELS = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
