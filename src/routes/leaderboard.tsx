@@ -73,7 +73,7 @@ function LeaderboardPage() {
   useEffect(() => {
     let cancelled = false;
     setReady(false);
-    fetchLeaderboard(period, mode).then((res) => {
+    fetchLeaderboard(period, mode, section === "all" ? undefined : section).then((res) => {
       if (cancelled) return;
       if (res.online) {
         setEntries(res.entries);
@@ -101,7 +101,7 @@ function LeaderboardPage() {
     return () => {
       cancelled = true;
     };
-  }, [period, mode, reloadKey]);
+  }, [period, mode, section, reloadKey]);
 
   const myBestRank = useMemo(
     () => entries.findIndex((e) => e.guestId === guestId) + 1,
