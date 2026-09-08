@@ -84,6 +84,7 @@ function SimulasiPage() {
   const [pending, setPending] = useState<SimulationBlueprint | null>(null);
   const [existing, setExisting] = useState<ExamSession | null>(null);
   const [ready, setReady] = useState(false);
+  const [arsipCount, setArsipCount] = useState(Math.min(10, ARSIP_TOTAL));
 
   useEffect(() => {
     setExisting(getSession());
