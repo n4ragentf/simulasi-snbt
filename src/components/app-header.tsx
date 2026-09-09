@@ -1,9 +1,18 @@
 import { Link } from "@tanstack/react-router";
-import { GraduationCap, Menu } from "lucide-react";
+import { GraduationCap, LogIn, Menu, ShieldCheck, UserRound } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useAccount } from "@/hooks/use-account";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const NAV = [
   { to: "/dashboard", label: "Dashboard" },
