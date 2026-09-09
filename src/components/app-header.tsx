@@ -33,6 +33,52 @@ export function Brand({ className = "" }: { className?: string }) {
   );
 }
 
+function AccountButton() {
+  const { ready, user, profile, isAdmin, isApproved, signOut } = useAccount();
+
+  if (!ready) return null;
+
+  if (!user) {
+    return (
+      <Button asChild variant="outline" size="sm" className="rounded-full">
+        <Link to="/auth">
+          <LogIn className="mr-1 size-4" aria-hidden="true" /> Masuk
+        </Link>
+      </Button>
+    );
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="rounded-full" aria-label="Menu akun">
+          <UserRound className="size-5" aria-hidden="true" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel className="truncate">
+          {profile?.display_name || profile?.email || "Akun"}
+        </DropdownMenuLabel>
+        <DropdownMenuLabel className="pt-0 text-xs font-normal text-muted-foreground">
+          {isApproved ? "Akun terverifikasi" : "Menunggu verifikasi admin"}
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {isAdmin ? (
+          <DropdownMenuItem asChild>
+            <Link to="/admin">
+              <ShieldCheck className="mr-2 size-4" aria-hidden="true" /> Verifikasi akun
+            </Link>
+          </DropdownMenuItem>
+        ) : null}
+        <DropdownMenuItem asChild>
+          <Link to="/profil">Profil</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => void signOut()}>Keluar</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 export function AppHeader() {
   const [open, setOpen] = useState(false);
 
