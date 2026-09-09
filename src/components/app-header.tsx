@@ -105,6 +105,7 @@ export function AppHeader() {
           <Button asChild size="sm" className="hidden rounded-full sm:inline-flex">
             <Link to="/simulasi">Mulai Simulasi</Link>
           </Button>
+          <AccountButton />
 
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
