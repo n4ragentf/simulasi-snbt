@@ -187,43 +187,66 @@ function DashboardPage() {
         </Card>
       ) : null}
 
-      <Card className="mt-6 shadow-card">
-        <CardContent className="flex flex-wrap items-center justify-between gap-6 p-5">
-          <div className="flex items-center gap-4">
-            <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Flame className="size-7" aria-hidden="true" />
-            </div>
-            <div>
-              <p className="font-display text-3xl font-bold leading-none">
-                {streak.current} <span className="text-base font-medium text-muted-foreground">hari</span>
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Runtunan harian · rekor {streak.longest} hari
-              </p>
-            </div>
-          </div>
-          <div className="flex items-end gap-2">
-            {week.map((d) => (
-              <div key={d.key} className="flex flex-col items-center gap-1">
-                <div
-                  className={`size-8 rounded-lg border ${
-                    d.active ? "border-primary bg-primary/80" : "border-border bg-muted"
-                  }`}
-                  aria-label={`${d.key}${d.active ? " aktif" : " tidak aktif"}`}
-                />
-                <span className="text-[10px] text-muted-foreground">
-                  {DAY_LABELS[new Date(`${d.key}T00:00:00`).getDay()]}
-                </span>
+      {account.isApproved ? (
+        <Card className="mt-6 shadow-card">
+          <CardContent className="flex flex-wrap items-center justify-between gap-6 p-5">
+            <div className="flex items-center gap-4">
+              <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <Flame className="size-7" aria-hidden="true" />
               </div>
-            ))}
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {streak.lastDay === todayKey
-              ? "Mantap! Kamu sudah latihan hari ini."
-              : "Selesaikan satu simulasi hari ini untuk menjaga runtunanmu."}
-          </p>
-        </CardContent>
-      </Card>
+              <div>
+                <p className="font-display text-3xl font-bold leading-none">
+                  {streak.current}{" "}
+                  <span className="text-base font-medium text-muted-foreground">hari</span>
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Runtunan harian · rekor {streak.longest} hari
+                </p>
+              </div>
+            </div>
+            <div className="flex items-end gap-2">
+              {week.map((d) => (
+                <div key={d.key} className="flex flex-col items-center gap-1">
+                  <div
+                    className={`size-8 rounded-lg border ${
+                      d.active ? "border-primary bg-primary/80" : "border-border bg-muted"
+                    }`}
+                    aria-label={`${d.key}${d.active ? " aktif" : " tidak aktif"}`}
+                  />
+                  <span className="text-[10px] text-muted-foreground">
+                    {DAY_LABELS[new Date(`${d.key}T00:00:00`).getDay()]}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {streak.lastDay === todayKey
+                ? "Mantap! Kamu sudah latihan hari ini."
+                : "Selesaikan satu simulasi hari ini untuk menjaga runtunanmu."}
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="mt-6 border-dashed shadow-card">
+          <CardContent className="flex flex-wrap items-center justify-between gap-4 p-5">
+            <div className="flex items-center gap-4">
+              <div className="flex size-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
+                <Flame className="size-7" aria-hidden="true" />
+              </div>
+              <div>
+                <p className="font-semibold">Runtunan harian khusus pemilik akun</p>
+                <p className="text-sm text-muted-foreground">
+                  Buat akun (diverifikasi admin) untuk mengaktifkan streak harian dan fitur akun
+                  lainnya. Sebagai guest kamu tetap bisa simulasi, riwayat, dan leaderboard.
+                </p>
+              </div>
+            </div>
+            <Button asChild variant="outline" className="rounded-full">
+              <Link to="/auth">Masuk / Daftar</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
